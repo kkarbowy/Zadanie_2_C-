@@ -126,3 +126,36 @@ class Order
         Console.WriteLine("Zamówienie zrealizowane.");
     }
 }
+
+class Program
+{
+    static void Main()
+    {
+        var tshirt = new Product("TSH001", "Koszulka Polo - M", 79.99);
+        var jeans = new Product("JNS001", "Jeansy Slim - S", 199.50);
+        var hat = new Product("HT001", "Czapka zimowa - S", 49.00);
+
+        var inv = new Inventory();
+        inv.AddStock(tshirt, 1);
+        inv.AddStock(jeans, 5);
+        inv.AddStock(hat, 20);
+
+        var cart = new ShoppingCart();
+        cart.AddProduct(tshirt, 3);
+        cart.AddProduct(jeans, 1);
+        cart.RemoveProduct(jeans, 1);
+        cart.ListItems();
+        Console.WriteLine($"Do zapłaty: {cart.CalculateTotal():F2} zł\n");
+
+        var order = new Order(cart, inv);
+        order.Process();
+        Console.WriteLine($"Status zamówienia: {order.Status}");
+        Console.WriteLine($"Pozostały stan Tshirt: {inv.GetStock(tshirt)} szt.");
+
+        Console.WriteLine("\nUzupełniam stan koszulek...\n");
+        inv.AddStock(tshirt, 15);
+        order.Process();
+        Console.WriteLine($"Status zamówienia: {order.Status}");
+        Console.WriteLine($"Pozostały stan Tshirt: {inv.GetStock(tshirt)} szt.");
+    }
+}
